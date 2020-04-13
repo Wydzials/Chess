@@ -10,16 +10,18 @@ import android.widget.TableLayout;
 public class MainActivity extends AppCompatActivity {
 
     private ImageView[][] squares;
+    private PiecesImages piecesImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        squares = new ImageView[8][8];
 
+        squares = new ImageView[8][8];
+        piecesImages = new PiecesImages();
         initializeSquares();
 
-        TableLayout boardLayout = findViewById(R.id.boardLayout);
+        //TableLayout boardLayout = findViewById(R.id.boardLayout);
     }
 
     private void initializeSquares() {
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        for (int row = 0; row < 4; row++) {
+        for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 String name = "square" + row + column;
                 int id = getResources().getIdentifier(name, "id", getPackageName());
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void squareOnClick(ImageView square, int row, int column) {
-        squares[row][column].setImageResource(R.drawable.king_w);
-        squares[row][column].setVisibility(View.INVISIBLE);
+        squares[row][column].setImageResource(piecesImages.getKingW());
+        //squares[row][column].setVisibility(View.INVISIBLE);
     }
 }
