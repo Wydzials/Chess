@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 
+import pl.wydzials.chess.pieces.Bishop;
+import pl.wydzials.chess.pieces.Color;
+import pl.wydzials.chess.pieces.Piece;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageView[][] squares;
@@ -21,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         piecesImages = new PiecesImages();
         initializeSquares();
 
-        //TableLayout boardLayout = findViewById(R.id.boardLayout);
+        Board board = new Board();
+        showBoard(board);
     }
 
     private void initializeSquares() {
@@ -50,7 +55,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void squareOnClick(ImageView square, int row, int column) {
-        squares[row][column].setImageResource(piecesImages.getKingW());
-        //squares[row][column].setVisibility(View.INVISIBLE);
+        square.setImageResource(piecesImages.getPieceImage(new Bishop(Color.WHITE)));
+    }
+
+    private void showBoard(Board board) {
+        for(int row = 0; row < 8; row++) {
+            for(int column = 0; column < 8; column++) {
+                Piece piece = board.getPiece(row, column);
+                int image = piecesImages.getPieceImage(piece);
+                squares[row][column].setImageResource(image);
+            }
+        }
     }
 }

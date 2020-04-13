@@ -1,47 +1,51 @@
 package pl.wydzials.chess;
 
+import java.util.HashMap;
+
+import pl.wydzials.chess.pieces.Color;
+import pl.wydzials.chess.pieces.Piece;
+
 public class PiecesImages {
-    private int bishopB;
-    private int bishopW;
 
-    private int kingB;
-    private int kingW;
+    private HashMap<String, Integer> pieces;
 
-    private int knightB;
-    private int knightW;
+    PiecesImages() {
+        pieces = new HashMap<>();
 
-    public int getBishopB() {
-        return bishopB;
+        pieces.put("BishopB", R.drawable.bishop_b);
+        pieces.put("BishopW", R.drawable.bishop_w);
+
+        pieces.put("KingB", R.drawable.king_b);
+        pieces.put("KingW", R.drawable.king_w);
+
+        pieces.put("KnightB", R.drawable.knight_b);
+        pieces.put("KnightW", R.drawable.knight_w);
+
+        pieces.put("PawnB", R.drawable.pawn_b);
+        pieces.put("PawnW", R.drawable.pawn_w);
+
+        pieces.put("QueenB", R.drawable.queen_b);
+        pieces.put("QueenW", R.drawable.queen_w);
+
+        pieces.put("RookB", R.drawable.rook_b);
+        pieces.put("RookW", R.drawable.rook_w);
     }
 
-    public int getBishopW() {
-        return bishopW;
-    }
+    int getPieceImage(Piece piece) {
+        if (piece != null) {
+            String name = piece.getClass().getSimpleName();
+            name += piece.getColor() == Color.WHITE ? 'W' : "B";
 
-    public int getKingB() {
-        return kingB;
-    }
+            Integer image = pieces.get(name);
 
-    public int getKingW() {
-        return kingW;
-    }
+            if (image != null) {
+                return image;
+            } else {
+                throw new IllegalArgumentException("No image for piece: " + piece);
+            }
+        } else {
+            return R.drawable.empty;
+        }
 
-    public int getKnightB() {
-        return knightB;
-    }
-
-    public int getKnightW() {
-        return knightW;
-    }
-
-    public PiecesImages() {
-        bishopB = R.drawable.bishop_b;
-        bishopW = R.drawable.bishop_w;
-
-        kingB = R.drawable.king_b;
-        kingW = R.drawable.king_w;
-
-        knightB = R.drawable.knight_b;
-        knightW = R.drawable.knight_w;
     }
 }
