@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 import pl.wydzials.chess.engine.ChessEngine;
 import pl.wydzials.chess.engine.pieces.Piece;
+import pl.wydzials.chess.engine.pieces.Position;
 
 public class BoardCanvas extends View {
 
@@ -63,12 +66,18 @@ public class BoardCanvas extends View {
                 Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
                 canvas.drawBitmap(square, null, squares[row][column], null);
 
-                Piece piece = engine.getBoard().getPiece(row, column);
+                Piece piece = engine.getBoard().getPiece(new Position(row, column));
                 Bitmap pieceBitmap = bitmaps.getBitmap(piece);
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
         }
         textView.setText(engine.getState().toString());
+
+
+        List<Position> highlightedSquares = engine.getHighlightedSquares();
+        for(Position position : highlightedSquares) {
+            canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
+        }
     }
 
     @Override

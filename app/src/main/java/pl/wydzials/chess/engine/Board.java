@@ -32,12 +32,12 @@ public class Board {
         }
     }
 
-    public Piece getPiece(int row, int column) {
-        return squares[row][column];
+    public Piece getPiece(Position position) {
+        return squares[position.getRow()][position.getColumn()];
     }
 
-    public void movePiece(int rowA, int columnA, int rowB, int columnB) {
-        squares[rowB][columnB] = squares[rowA][columnA];
-        squares[rowA][columnA] = null;
+    public void movePiece(Position posA, Position posB) {
+        squares[posB.getRow()][posB.getColumn()] = squares[posA.getRow()][posA.getColumn()];
+        squares[posA.getRow()][posA.getColumn()] = null;
     }
 }
