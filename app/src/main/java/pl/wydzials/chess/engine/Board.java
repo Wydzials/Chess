@@ -1,11 +1,11 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.engine;
 
-import pl.wydzials.chess.pieces.*;
+import pl.wydzials.chess.engine.pieces.*;
 
 public class Board {
     private Piece[][] squares;
 
-    Board() {
+    public Board() {
         squares = new Piece[8][8];
 
         squares[0][0] = new Rook(Color.BLACK);
@@ -32,11 +32,11 @@ public class Board {
         }
     }
 
-    Piece getPiece(int row, int column) {
+    public Piece getPiece(int row, int column) {
         return squares[row][column];
     }
 
-    void movePiece(int rowA, int columnA, int rowB, int columnB) {
+    public void movePiece(int rowA, int columnA, int rowB, int columnB) {
         squares[rowB][columnB] = squares[rowA][columnA];
         squares[rowA][columnA] = null;
     }

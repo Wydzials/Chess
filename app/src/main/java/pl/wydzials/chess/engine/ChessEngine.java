@@ -1,7 +1,7 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.engine;
 
-import pl.wydzials.chess.pieces.Color;
-import pl.wydzials.chess.pieces.Piece;
+import pl.wydzials.chess.engine.pieces.Color;
+import pl.wydzials.chess.engine.pieces.Piece;
 
 public class ChessEngine {
 
@@ -11,7 +11,7 @@ public class ChessEngine {
     private int previousRow;
     private int previousColumn;
 
-    ChessEngine() {
+    public ChessEngine() {
         board = new Board();
         state = State.NEXT_WHITE;
     }
@@ -20,11 +20,11 @@ public class ChessEngine {
         return state;
     }
 
-    Board getBoard() {
+    public Board getBoard() {
         return board;
     }
 
-    void boardClicked(int row, int column) {
+    public void boardClicked(int row, int column) {
         Piece piece = board.getPiece(row, column);
         if (state == State.NEXT_WHITE && piece != null && piece.getColor() == Color.WHITE) {
             state = State.MOVING_WHITE;

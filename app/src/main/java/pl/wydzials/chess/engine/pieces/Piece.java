@@ -1,4 +1,4 @@
-package pl.wydzials.chess.pieces;
+package pl.wydzials.chess.engine.pieces;
 
 public abstract class Piece {
     private Color color;
