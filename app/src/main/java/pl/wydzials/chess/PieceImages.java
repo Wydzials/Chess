@@ -5,11 +5,11 @@ import java.util.HashMap;
 import pl.wydzials.chess.pieces.Color;
 import pl.wydzials.chess.pieces.Piece;
 
-public class PiecesImages {
+public class PieceImages {
 
     private HashMap<String, Integer> pieces;
 
-    PiecesImages() {
+    PieceImages() {
         pieces = new HashMap<>();
 
         pieces.put("BishopB", R.drawable.bishop_b);

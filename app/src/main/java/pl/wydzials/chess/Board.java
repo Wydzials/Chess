@@ -35,4 +35,9 @@ public class Board {
     Piece getPiece(int row, int column) {
         return squares[row][column];
     }
+
+    void movePiece(int rowA, int columnA, int rowB, int columnB) {
+        squares[rowB][columnB] = squares[rowA][columnA];
+        squares[rowA][columnA] = null;
+    }
 }
