@@ -14,11 +14,9 @@ public class Bitmaps {
     private HashMap<String, Bitmap> bitmaps;
     private Resources resources;
 
-    public Bitmaps(Resources resources) {
+    Bitmaps(Resources resources) {
         bitmaps = new HashMap<>();
         this.resources = resources;
-
-        bitmaps.put("Board", BitmapFactory.decodeResource(resources, R.drawable.board));
 
         bitmaps.put("BishopB", BitmapFactory.decodeResource(resources, R.drawable.bishop_b));
         bitmaps.put("BishopW", BitmapFactory.decodeResource(resources, R.drawable.bishop_w));
@@ -37,9 +35,13 @@ public class Bitmaps {
 
         bitmaps.put("RookB", BitmapFactory.decodeResource(resources, R.drawable.rook_b));
         bitmaps.put("RookW", BitmapFactory.decodeResource(resources, R.drawable.rook_w));
+
+        bitmaps.put("Board", BitmapFactory.decodeResource(resources, R.drawable.board));
+        bitmaps.put("SquareB", BitmapFactory.decodeResource(resources, R.drawable.square_b));
+        bitmaps.put("SquareW", BitmapFactory.decodeResource(resources, R.drawable.square_w));
     }
 
-    public Bitmap getPiece(Piece piece) {
+    Bitmap getBitmap(Piece piece) {
         if (piece != null) {
             String name = piece.getClass().getSimpleName();
             name += piece.getColor() == Color.WHITE ? 'W' : "B";
@@ -56,7 +58,11 @@ public class Bitmaps {
         }
     }
 
-    public Bitmap getBoard() {
-        return bitmaps.get("Board");
+    Bitmap getBitmap(String name) {
+        Bitmap bitmap = bitmaps.get(name);
+        if(bitmap == null) {
+            throw new IllegalArgumentException("No bitmap for name: " + name);
+        }
+        return bitmap;
     }
 }

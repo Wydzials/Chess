@@ -1,5 +1,7 @@
 package pl.wydzials.chess.engine;
 
+import android.widget.SeekBar;
+
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
 
@@ -34,12 +36,16 @@ public class ChessEngine {
             state = State.MOVING_BLACK;
             previousRow = row;
             previousColumn = column;
-        } else if(state == State.MOVING_WHITE && (piece == null || piece.getColor() != Color.WHITE)) {
+        } else if (state == State.MOVING_WHITE && (piece == null || piece.getColor() != Color.WHITE)) {
             state = State.NEXT_BLACK;
             board.movePiece(previousRow, previousColumn, row, column);
-        } else if(state == State.MOVING_BLACK && (piece == null ||piece.getColor() != Color.BLACK)) {
+        } else if (state == State.MOVING_BLACK && (piece == null || piece.getColor() != Color.BLACK)) {
             state = State.NEXT_WHITE;
             board.movePiece(previousRow, previousColumn, row, column);
+        } else if (state == State.MOVING_WHITE) {
+            state = State.NEXT_WHITE;
+        } else if(state == State.MOVING_BLACK) {
+            state = State.NEXT_BLACK;
         }
     }
 

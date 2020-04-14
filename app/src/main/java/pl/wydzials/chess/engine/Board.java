@@ -5,7 +5,7 @@ import pl.wydzials.chess.engine.pieces.*;
 public class Board {
     private Piece[][] squares;
 
-    public Board() {
+    Board() {
         squares = new Piece[8][8];
 
         squares[0][0] = new Rook(Color.BLACK);

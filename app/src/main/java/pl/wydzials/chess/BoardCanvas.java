@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-
 import pl.wydzials.chess.engine.ChessEngine;
 import pl.wydzials.chess.engine.pieces.Piece;
 
@@ -20,10 +19,11 @@ public class BoardCanvas extends View {
     private final int PADDING = 30;
     private int pieceSize;
 
-    Bitmaps bitmaps;
-    ChessEngine engine;
-    TextView textView;
-    Rect[][] squares;
+    private Bitmaps bitmaps;
+    private ChessEngine engine;
+    private TextView textView;
+    private Rect[][] squares;
+    private Rect board;
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -40,6 +40,7 @@ public class BoardCanvas extends View {
                         PADDING + (column + 1) * pieceSize, PADDING + (row + 1) * pieceSize);
             }
         }
+        board = new Rect(0, 0, getWidth(), getWidth());
     }
 
     void setChessEngine(ChessEngine engine) {
@@ -55,12 +56,15 @@ public class BoardCanvas extends View {
         if (squares == null) {
             initializeRectangles();
         }
-        canvas.drawBitmap(bitmaps.getBoard(), null, new Rect(0, 0, getWidth(), getWidth()), null);
+        canvas.drawBitmap(bitmaps.getBitmap("Board"), null, board, null);
 
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
+                Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
+                canvas.drawBitmap(square, null, squares[row][column], null);
+
                 Piece piece = engine.getBoard().getPiece(row, column);
-                Bitmap pieceBitmap = bitmaps.getPiece(piece);
+                Bitmap pieceBitmap = bitmaps.getBitmap(piece);
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
         }
