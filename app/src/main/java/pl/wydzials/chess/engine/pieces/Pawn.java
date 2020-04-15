@@ -7,12 +7,12 @@ import pl.wydzials.chess.engine.Board;
 
 public class Pawn extends Piece {
 
+    public boolean enPassantReady;
+
     public Pawn(Color color) {
         super(color);
         enPassantReady = false;
     }
-
-    public boolean enPassantReady;
 
     @Override
     public List<Position> getPossibleMoves(Board board, Position myPosition) {
@@ -30,7 +30,9 @@ public class Pawn extends Piece {
         }
         if ((myPosition.getRow() - rowChange) % 7 == 0) {
             Position testPosition = myPosition.add(rowChange * 2, 0);
-            if (board.getPiece(testPosition) == null || board.getPiece(testPosition).color != color) {
+            Position emptyPosition = myPosition.add(rowChange, 0);
+            if ((board.getPiece(testPosition) == null || board.getPiece(testPosition).color != color)
+            && board.getPiece(emptyPosition) == null) {
                 moves.add(testPosition);
             }
         }

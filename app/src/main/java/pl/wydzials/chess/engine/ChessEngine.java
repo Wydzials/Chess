@@ -9,14 +9,14 @@ import pl.wydzials.chess.engine.pieces.Position;
 
 public class ChessEngine {
 
-    private State state;
+    private MoveState state;
     private Board board;
     private Position previousPosition;
     private List<Position> highlightedSquares;
 
     public ChessEngine() {
         board = new Board();
-        state = State.NEXT_WHITE;
+        state = MoveState.NEXT_WHITE;
         highlightedSquares = new ArrayList<>();
     }
 
@@ -24,7 +24,7 @@ public class ChessEngine {
         return highlightedSquares;
     }
 
-    public State getState() {
+    public MoveState getState() {
         return state;
     }
 
@@ -36,12 +36,12 @@ public class ChessEngine {
         Position position = new Position(row, column);
         Piece piece = board.getPiece(position);
 
-        if (piece != null && ((state == State.NEXT_WHITE && piece.getColor() == Color.WHITE)
-                || (state == State.NEXT_BLACK && piece.getColor() == Color.BLACK))) {
+        if (piece != null && ((state == MoveState.NEXT_WHITE && piece.getColor() == Color.WHITE)
+                || (state == MoveState.NEXT_BLACK && piece.getColor() == Color.BLACK))) {
             state = state.next();
             highlightedSquares = piece.getPossibleMoves(board, position);
             previousPosition = new Position(row, column);
-        } else if ((state == State.MOVING_WHITE || state == State.MOVING_BLACK)) {
+        } else if ((state == MoveState.MOVING_WHITE || state == MoveState.MOVING_BLACK)) {
             if (highlightedSquares.contains(position)) {
                 state = state.next();
                 board.movePiece(previousPosition, position);
@@ -56,17 +56,17 @@ public class ChessEngine {
         }
     }
 
-    public enum State {
+    public enum MoveState {
         NEXT_WHITE,
         MOVING_WHITE,
         NEXT_BLACK,
         MOVING_BLACK;
 
-        public State next() {
+        public MoveState next() {
             return values()[(ordinal() + 1) % values().length];
         }
 
-        public State previous() {
+        public MoveState previous() {
             return values()[(ordinal() + values().length - 1) % values().length];
         }
     }
