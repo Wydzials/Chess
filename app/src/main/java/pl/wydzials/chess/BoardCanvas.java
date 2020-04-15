@@ -71,7 +71,7 @@ public class BoardCanvas extends View {
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
         }
-        textView.setText(engine.getState().toString());
+        textView.setText(engine.getState().toString() + ", " + engine.getBoard().getGameState().toString());
 
         List<Position> highlightedSquares = engine.getHighlightedSquares();
         for (Position position : highlightedSquares) {

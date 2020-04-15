@@ -5,7 +5,7 @@ import java.util.List;
 
 import pl.wydzials.chess.engine.Board;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
     protected Color color;
 
     public Color getColor() {
@@ -49,5 +49,15 @@ public abstract class Piece {
 
     public void madeMove(Board board, Position posA, Position posB) {
         // needed only for some pieces
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

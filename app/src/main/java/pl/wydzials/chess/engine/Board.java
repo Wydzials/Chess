@@ -1,5 +1,8 @@
 package pl.wydzials.chess.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.wydzials.chess.engine.pieces.Bishop;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.King;
@@ -10,8 +13,10 @@ import pl.wydzials.chess.engine.pieces.Position;
 import pl.wydzials.chess.engine.pieces.Queen;
 import pl.wydzials.chess.engine.pieces.Rook;
 
-public class Board {
+public class Board implements Cloneable {
     private Piece[][] squares;
+
+    private GameState gameState;
 
     Board() {
         squares = new Piece[8][8];
@@ -38,10 +43,15 @@ public class Board {
             squares[6][column] = new Pawn(Color.WHITE);
             squares[1][column] = new Pawn(Color.BLACK);
         }
+        gameState = GameState.PLAYING;
     }
 
     public Piece getPiece(Position position) {
         return squares[position.getRow()][position.getColumn()];
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 
     void movePiece(Position posA, Position posB) {
@@ -62,6 +72,11 @@ public class Board {
             }
         }
 
+        // win check
+        if (getPiece(posB) instanceof King) {
+            gameState = getPiece(posB).getColor() == Color.WHITE ? GameState.BLACK_WON : GameState.WHITE_WON;
+        }
+
         squares[posB.getRow()][posB.getColumn()] = squares[posA.getRow()][posA.getColumn()];
         squares[posA.getRow()][posA.getColumn()] = null;
         squares[posB.getRow()][posB.getColumn()].madeMove(this, posA, posB);
@@ -70,6 +85,8 @@ public class Board {
         if (getPiece(posB) instanceof Pawn && (posB.getRow() == 0 || posB.getRow() == 7)) {
             squares[posB.getRow()][posB.getColumn()] = new Queen(getPiece(posB).getColor());
         }
+
+
     }
 
     private void clearEnPassantFlags(Color color) {
@@ -80,6 +97,45 @@ public class Board {
                     ((Pawn) piece).enPassantReady = false;
                 }
             }
+        }
+    }
+
+    public List<Position> getPiecesOfColor(Color color) {
+        List<Position> pieces = new ArrayList<>();
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                Piece piece = squares[row][column];
+                if (piece != null && piece.getColor() == color) {
+                    pieces.add(new Position(row, column));
+                }
+            }
+        }
+        return pieces;
+    }
+
+    public enum GameState {
+        PLAYING,
+        DRAW,
+        WHITE_WON,
+        BLACK_WON
+    }
+
+    public Board clone() {
+        try {
+            Board board = (Board) super.clone();
+            board.squares = new Piece[8][8];
+
+            for (int row = 0; row < 8; row++) {
+                for (int column = 0; column < 8; column++) {
+                    if(squares[row][column] != null)
+                        board.squares[row][column] = (Piece) squares[row][column].clone();
+                }
+            }
+
+            return board;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
