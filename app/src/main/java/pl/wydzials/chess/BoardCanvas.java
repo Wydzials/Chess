@@ -20,7 +20,7 @@ import pl.wydzials.chess.engine.pieces.Position;
 public class BoardCanvas extends View {
 
     private final int PADDING = 30;
-    private int pieceSize;
+    private int squareSize;
 
     private Bitmaps bitmaps;
     private ChessEngine engine;
@@ -33,19 +33,6 @@ public class BoardCanvas extends View {
         bitmaps = new Bitmaps(getResources());
     }
 
-    private void initializeRectangles() {
-        pieceSize = (getWidth() - 2 * PADDING) / 8;
-        squares = new Rect[8][8];
-
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                squares[row][column] = new Rect(PADDING + column * pieceSize, PADDING + row * pieceSize,
-                        PADDING + (column + 1) * pieceSize, PADDING + (row + 1) * pieceSize);
-            }
-        }
-        board = new Rect(0, 0, getWidth(), getWidth());
-    }
-
     void setChessEngine(ChessEngine engine) {
         this.engine = engine;
     }
@@ -54,10 +41,23 @@ public class BoardCanvas extends View {
         this.textView = textView;
     }
 
+    private void initializeSquares() {
+        squares = new Rect[8][8];
+        squareSize = (getWidth() - 2 * PADDING) / 8;
+
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                squares[row][column] = new Rect(PADDING + column * squareSize, PADDING + row * squareSize,
+                        PADDING + (column + 1) * squareSize, PADDING + (row + 1) * squareSize);
+            }
+        }
+        board = new Rect(0, 0, getWidth(), getWidth());
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (squares == null) {
-            initializeRectangles();
+            initializeSquares();
         }
         canvas.drawBitmap(bitmaps.getBitmap("Board"), null, board, null);
 
@@ -73,9 +73,8 @@ public class BoardCanvas extends View {
         }
         textView.setText(engine.getState().toString());
 
-
         List<Position> highlightedSquares = engine.getHighlightedSquares();
-        for(Position position : highlightedSquares) {
+        for (Position position : highlightedSquares) {
             canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
         }
     }
@@ -83,10 +82,9 @@ public class BoardCanvas extends View {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            int rowClicked = (int) (((ev.getY() - PADDING) - (ev.getY() - PADDING) % pieceSize) / pieceSize);
-            int columnClicked = (int) (((ev.getX() - PADDING) - (ev.getX() - PADDING) % pieceSize) / pieceSize);
+            int rowClicked = (int) (((ev.getY() - PADDING) - (ev.getY() - PADDING) % squareSize) / squareSize);
+            int columnClicked = (int) (((ev.getX() - PADDING) - (ev.getX() - PADDING) % squareSize) / squareSize);
 
-            System.out.println(rowClicked + " " + columnClicked);
             if (rowClicked < 8 && columnClicked < 8) {
                 engine.boardClicked(rowClicked, columnClicked);
                 invalidate();

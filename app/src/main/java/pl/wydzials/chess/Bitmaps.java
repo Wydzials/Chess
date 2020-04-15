@@ -61,7 +61,7 @@ public class Bitmaps {
 
     Bitmap getBitmap(String name) {
         Bitmap bitmap = bitmaps.get(name);
-        if(bitmap == null) {
+        if (bitmap == null) {
             throw new IllegalArgumentException("No bitmap for name: " + name);
         }
         return bitmap;

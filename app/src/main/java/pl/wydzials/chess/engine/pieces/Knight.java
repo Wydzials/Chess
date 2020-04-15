@@ -17,7 +17,7 @@ public class Knight extends Piece {
         int[][] possibleMoves = {{-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}};
 
         for (int[] possibleMove : possibleMoves) {
-            if(myPosition.canAdd(possibleMove[0], possibleMove[1])) {
+            if (myPosition.canAdd(possibleMove[0], possibleMove[1])) {
                 Position tmpPosition = myPosition.add(possibleMove[0], possibleMove[1]);
                 Piece p = board.getPiece(tmpPosition);
                 if (p == null || p.getColor() != color) {

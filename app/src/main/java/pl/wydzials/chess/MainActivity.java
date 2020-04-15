@@ -1,17 +1,14 @@
 package pl.wydzials.chess;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import pl.wydzials.chess.engine.ChessEngine;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ChessEngine engine;
-    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +16,10 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        textView = findViewById(R.id.textView);
         BoardCanvas canvas = findViewById(R.id.canvas);
+        canvas.setChessEngine(new ChessEngine());
 
-        engine = new ChessEngine();
-        textView.setText(engine.getState().toString());
-
-        canvas.setChessEngine(engine);
+        TextView textView = findViewById(R.id.textView);
         canvas.setTextView(textView);
     }
 }

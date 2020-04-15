@@ -11,19 +11,17 @@ public class ChessEngine {
 
     private State state;
     private Board board;
-
     private Position previousPosition;
-
     private List<Position> highlightedSquares;
-
-    public List<Position> getHighlightedSquares() {
-        return highlightedSquares;
-    }
 
     public ChessEngine() {
         board = new Board();
         state = State.NEXT_WHITE;
         highlightedSquares = new ArrayList<>();
+    }
+
+    public List<Position> getHighlightedSquares() {
+        return highlightedSquares;
     }
 
     public State getState() {
@@ -43,14 +41,18 @@ public class ChessEngine {
             state = state.next();
             highlightedSquares = piece.getPossibleMoves(board, position);
             previousPosition = new Position(row, column);
-        } else if ((state == State.MOVING_WHITE || state == State.MOVING_BLACK)
-                && highlightedSquares.contains(position)) {
-            state = state.next();
-            board.movePiece(previousPosition, position);
-            highlightedSquares.clear();
-        } else if (state == State.MOVING_WHITE || state == State.MOVING_BLACK) {
-            state = state.previous();
-            highlightedSquares.clear();
+        } else if ((state == State.MOVING_WHITE || state == State.MOVING_BLACK)) {
+            if (highlightedSquares.contains(position)) {
+                state = state.next();
+                board.movePiece(previousPosition, position);
+                highlightedSquares.clear();
+            } else if (piece != null && piece.getColor() == board.getPiece(previousPosition).getColor()) {
+                highlightedSquares = piece.getPossibleMoves(board, position);
+                previousPosition = new Position(row, column);
+            } else {
+                state = state.previous();
+                highlightedSquares.clear();
+            }
         }
     }
 
