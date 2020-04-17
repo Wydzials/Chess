@@ -59,7 +59,7 @@ public class Board implements Cloneable {
         if (getPiece(posA) instanceof Pawn && (posA.getColumn() != posB.getColumn()) && getPiece(posB) == null) {
             squares[posA.getRow()][posB.getColumn()] = null;
         }
-        clearEnPassantFlags(getPiece(posA).getColor());
+        //clearEnPassantFlags(getPiece(posA).getColor());
 
         // castling
         if (getPiece(posA) instanceof King && Math.abs(posA.getColumn() - posB.getColumn()) > 1) {
@@ -85,8 +85,6 @@ public class Board implements Cloneable {
         if (getPiece(posB) instanceof Pawn && (posB.getRow() == 0 || posB.getRow() == 7)) {
             squares[posB.getRow()][posB.getColumn()] = new Queen(getPiece(posB).getColor());
         }
-
-
     }
 
     private void clearEnPassantFlags(Color color) {

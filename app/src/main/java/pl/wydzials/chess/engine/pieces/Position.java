@@ -26,12 +26,10 @@ public class Position {
     }
 
     boolean canAdd(int rows, int columns) {
-        try {
-            add(rows, columns);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        int checkRow = row + rows;
+        int checkColumn = column + columns;
+
+        return checkRow >= 0 && checkRow <= 7 && checkColumn >= 0 && checkColumn <= 7;
     }
 
     @Override

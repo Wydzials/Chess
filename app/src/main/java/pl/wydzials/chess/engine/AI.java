@@ -19,6 +19,7 @@ public class AI {
     private static int minimaxCalls;
 
     public static Position[] makeMove(Board board, Color color) {
+        long start = System.nanoTime();
         minimaxCalls = 0;
         maximizingColor = color;
         List<Position> myPieces = board.getPiecesOfColor(color);
@@ -33,7 +34,7 @@ public class AI {
                 Board childBoard = board.clone();
                 childBoard.movePiece(piece, move);
 
-                int value = minimax(childBoard, DEPTH, color.other());
+                int value = minimax(childBoard, DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, color.other());
                 if (value > bestMoveValue) {
                     bestMoveA = piece;
                     bestMoveB = move;
@@ -42,10 +43,11 @@ public class AI {
             }
         }
         System.out.println("Minimax calls: " + minimaxCalls);
+        System.out.println("Time: " + (System.nanoTime() - start) / 1_000_000);
         return new Position[]{bestMoveA, bestMoveB};
     }
 
-    private static int minimax(Board board, int depth, Color color) {
+    private static int minimax(Board board, int depth, int alpha, int beta, Color color) {
         minimaxCalls++;
         if (depth == 0 || board.getGameState() != Board.GameState.PLAYING) {
             return evaluateBoard(board);
@@ -62,8 +64,13 @@ public class AI {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
 
-                    int evaluation = minimax(childBoard, depth - 1, color.other());
+                    int evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
                     maxEvaluation = Math.max(evaluation, maxEvaluation);
+
+                    alpha = Math.max(evaluation, alpha);
+                    if(beta <= alpha) {
+                        break;
+                    }
                 }
             }
             return maxEvaluation;
@@ -76,8 +83,13 @@ public class AI {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
 
-                    int evaluation = minimax(childBoard, depth - 1, color.other());
+                    int evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
                     minEvaluation = Math.min(evaluation, minEvaluation);
+
+                    beta = Math.min(evaluation, beta);
+                    if(beta <= alpha) {
+                        break;
+                    }
                 }
             }
             return minEvaluation;
