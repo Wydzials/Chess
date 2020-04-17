@@ -21,11 +21,11 @@ public class Position {
         return column;
     }
 
-    public Position add(int rows, int columns) {
+    Position add(int rows, int columns) {
         return new Position(row + rows, column + columns);
     }
 
-    public boolean canAdd(int rows, int columns) {
+    boolean canAdd(int rows, int columns) {
         try {
             add(rows, columns);
             return true;

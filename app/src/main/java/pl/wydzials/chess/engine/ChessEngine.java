@@ -13,11 +13,13 @@ public class ChessEngine {
     private Board board;
     private Position previousPosition;
     private List<Position> highlightedSquares;
+    private GameType gameType;
 
-    public ChessEngine() {
+    public ChessEngine(GameType gameType) {
         board = new Board();
         state = MoveState.NEXT_WHITE;
         highlightedSquares = new ArrayList<>();
+        this.gameType = gameType;
     }
 
     public List<Position> getHighlightedSquares() {
@@ -46,6 +48,11 @@ public class ChessEngine {
                 state = state.next();
                 board.movePiece(previousPosition, position);
                 highlightedSquares.clear();
+                if(state == MoveState.NEXT_BLACK && gameType == GameType.PLAYER_VS_AI) {
+                    Position[] move = AI.makeMove(board, Color.BLACK);
+                    boardClicked(move[0].getRow(), move[0].getColumn());
+                    boardClicked(move[1].getRow(), move[1].getColumn());
+                }
             } else if (piece != null && piece.getColor() == board.getPiece(previousPosition).getColor()) {
                 highlightedSquares = piece.getPossibleMoves(board, position);
                 previousPosition = new Position(row, column);
@@ -69,6 +76,11 @@ public class ChessEngine {
         public MoveState previous() {
             return values()[(ordinal() + values().length - 1) % values().length];
         }
+    }
+
+    public enum GameType {
+        PLAYER_VS_PLAYER,
+        PLAYER_VS_AI
     }
 
 }

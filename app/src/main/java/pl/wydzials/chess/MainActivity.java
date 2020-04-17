@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BoardCanvas canvas = findViewById(R.id.canvas);
-        canvas.setChessEngine(new ChessEngine());
+        canvas.setChessEngine(new ChessEngine(ChessEngine.GameType.PLAYER_VS_AI));
 
         TextView textView = findViewById(R.id.textView);
         canvas.setTextView(textView);

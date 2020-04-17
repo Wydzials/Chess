@@ -29,6 +29,7 @@ public class BoardTest {
         Board b = a.clone();
 
         a.movePiece(new Position(1, 0), new Position(2, 0));
+        assertTrue(a.getPiece(new Position(2, 0)) instanceof Pawn);
 
         assertTrue(b.getPiece(new Position(1, 0)) instanceof Pawn);
         assertNull(b.getPiece(new Position(2, 0)));
