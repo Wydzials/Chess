@@ -28,11 +28,13 @@ public class Pawn extends Piece {
                 }
             }
         }
+
+        // move two squares
         if ((myPosition.getRow() - rowChange) % 7 == 0) {
             Position testPosition = myPosition.add(rowChange * 2, 0);
             Position emptyPosition = myPosition.add(rowChange, 0);
-            if ((board.getPiece(testPosition) == null || board.getPiece(testPosition).color != color)
-            && board.getPiece(emptyPosition) == null) {
+
+            if (board.getPiece(testPosition) == null && board.getPiece(emptyPosition) == null) {
                 moves.add(testPosition);
             }
         }

@@ -85,15 +85,12 @@ public class AI {
     }
 
     private static int evaluateBoard(Board board) {
-        List<Position> whitePieces = board.getPiecesOfColor(maximizingColor);
-        List<Position> blackPieces = board.getPiecesOfColor(maximizingColor.other());
-
         int value = 0;
 
-        for (Position position : whitePieces) {
+        for (Position position : board.getPiecesOfColor(maximizingColor)) {
             value += evaluatePiece(board.getPiece(position));
         }
-        for (Position position : blackPieces) {
+        for (Position position : board.getPiecesOfColor(maximizingColor.other())) {
             value -= evaluatePiece(board.getPiece(position));
         }
 

@@ -127,7 +127,7 @@ public class Board implements Cloneable {
 
             for (int row = 0; row < 8; row++) {
                 for (int column = 0; column < 8; column++) {
-                    if(squares[row][column] != null)
+                    if (squares[row][column] != null)
                         board.squares[row][column] = (Piece) squares[row][column].clone();
                 }
             }
