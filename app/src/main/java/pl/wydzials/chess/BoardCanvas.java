@@ -66,7 +66,7 @@ public class BoardCanvas extends View {
                 Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
                 canvas.drawBitmap(square, null, squares[row][column], null);
 
-                Piece piece = engine.getBoard().getPiece(new Position(row, column));
+                Piece piece = engine.getBoard().getPiece(row, column);
                 Bitmap pieceBitmap = bitmaps.getBitmap(piece);
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
@@ -82,11 +82,21 @@ public class BoardCanvas extends View {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            int rowClicked = (int) (((ev.getY() - PADDING) - (ev.getY() - PADDING) % squareSize) / squareSize);
-            int columnClicked = (int) (((ev.getX() - PADDING) - (ev.getX() - PADDING) % squareSize) / squareSize);
+            // wait for AI to finish
+            if (engine.getGameType() == ChessEngine.GameType.PLAYER_VS_AI && engine.getState() == ChessEngine.MoveState.NEXT_BLACK) {
+                return true;
+            }
+
+            final int rowClicked = (int) (((ev.getY() - PADDING) - (ev.getY() - PADDING) % squareSize) / squareSize);
+            final int columnClicked = (int) (((ev.getX() - PADDING) - (ev.getX() - PADDING) % squareSize) / squareSize);
 
             if (rowClicked < 8 && columnClicked < 8) {
-                engine.boardClicked(rowClicked, columnClicked);
+                new Thread(new Runnable() {
+                    public void run() {
+                        engine.boardClicked(rowClicked, columnClicked);
+                        invalidate();
+                    }
+                }).start();
                 invalidate();
             }
         }

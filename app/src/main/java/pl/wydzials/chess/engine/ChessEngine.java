@@ -31,6 +31,10 @@ public class ChessEngine {
         return state;
     }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
     public Board getBoard() {
         return board;
     }
