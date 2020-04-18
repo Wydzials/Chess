@@ -17,6 +17,7 @@ public class ChessEngine {
 
     public ChessEngine(GameType gameType) {
         board = new Board();
+        board.setOpeningPieces();
         state = MoveState.NEXT_WHITE;
         highlightedSquares = new ArrayList<>();
         this.gameType = gameType;
@@ -82,5 +83,4 @@ public class ChessEngine {
         PLAYER_VS_PLAYER,
         PLAYER_VS_AI
     }
-
 }

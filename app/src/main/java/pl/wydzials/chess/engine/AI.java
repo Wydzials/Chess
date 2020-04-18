@@ -8,15 +8,19 @@ import pl.wydzials.chess.engine.pieces.King;
 import pl.wydzials.chess.engine.pieces.Knight;
 import pl.wydzials.chess.engine.pieces.Pawn;
 import pl.wydzials.chess.engine.pieces.Piece;
+import pl.wydzials.chess.engine.pieces.PieceEvaluator;
 import pl.wydzials.chess.engine.pieces.Position;
 import pl.wydzials.chess.engine.pieces.Queen;
 import pl.wydzials.chess.engine.pieces.Rook;
 
 public class AI {
 
-    private final static int DEPTH = 2;
+    private final static int DEPTH = 3;
     private static Color maximizingColor;
     private static int minimaxCalls;
+
+    private static PieceEvaluator pieceEvaluator = new PieceEvaluator();
+
 
     public static Position[] makeMove(Board board, Color color) {
         long start = System.nanoTime();
@@ -24,7 +28,7 @@ public class AI {
         maximizingColor = color;
         List<Position> myPieces = board.getPiecesOfColor(color);
 
-        int bestMoveValue = Integer.MIN_VALUE;
+        double bestMoveValue = Integer.MIN_VALUE;
         Position bestMoveA = null;
         Position bestMoveB = null;
 
@@ -34,7 +38,7 @@ public class AI {
                 Board childBoard = board.clone();
                 childBoard.movePiece(piece, move);
 
-                int value = minimax(childBoard, DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, color.other());
+                double value = minimax(childBoard, DEPTH - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, color.other());
                 if (value > bestMoveValue) {
                     bestMoveA = piece;
                     bestMoveB = move;
@@ -47,16 +51,19 @@ public class AI {
         return new Position[]{bestMoveA, bestMoveB};
     }
 
-    private static int minimax(Board board, int depth, int alpha, int beta, Color color) {
+    private static double minimax(Board board, double depth, double alpha, double beta, Color color) {
         minimaxCalls++;
-        if (depth == 0 || board.getGameState() != Board.GameState.PLAYING) {
+        if (depth <= 0 || board.getGameState() != Board.GameState.PLAYING) {
+            if (board.getGameState() == Board.GameState.BLACK_WON && color == Color.BLACK) {
+                return -evaluateBoard(board);
+            }
             return evaluateBoard(board);
         }
 
         List<Position> myPieces = board.getPiecesOfColor(color);
 
         if (color == maximizingColor) {
-            int maxEvaluation = Integer.MIN_VALUE;
+            double maxEvaluation = Integer.MIN_VALUE;
 
             for (Position piece : myPieces) {
                 List<Position> moves = board.getPiece(piece).getPossibleMoves(board, piece);
@@ -64,18 +71,18 @@ public class AI {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
 
-                    int evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
+                    double evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
                     maxEvaluation = Math.max(evaluation, maxEvaluation);
 
                     alpha = Math.max(evaluation, alpha);
-                    if(beta <= alpha) {
+                    if (beta <= alpha) {
                         break;
                     }
                 }
             }
             return maxEvaluation;
         } else {
-            int minEvaluation = Integer.MAX_VALUE;
+            double minEvaluation = Integer.MAX_VALUE;
 
             for (Position piece : myPieces) {
                 List<Position> moves = board.getPiece(piece).getPossibleMoves(board, piece);
@@ -83,11 +90,11 @@ public class AI {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
 
-                    int evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
+                    double evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
                     minEvaluation = Math.min(evaluation, minEvaluation);
 
                     beta = Math.min(evaluation, beta);
-                    if(beta <= alpha) {
+                    if (beta <= alpha) {
                         break;
                     }
                 }
@@ -99,19 +106,32 @@ public class AI {
     private static int evaluateBoard(Board board) {
         int value = 0;
 
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                Piece piece = board.getPiece(row, column);
+                if (piece != null) {
+                    if (piece.getColor() == maximizingColor) {
+                        value += evaluatePiece(piece, row, column);
+                    } else {
+                        value -= evaluatePiece(piece, row, column);
+                    }
+                }
+            }
+        }
+/*
         for (Position position : board.getPiecesOfColor(maximizingColor)) {
             value += evaluatePiece(board.getPiece(position));
         }
         for (Position position : board.getPiecesOfColor(maximizingColor.other())) {
             value -= evaluatePiece(board.getPiece(position));
         }
-
+*/
         return value;
     }
 
-    private static int evaluatePiece(Piece piece) {
+    private static double evaluatePiece(Piece piece, int row, int column) {
         if (piece instanceof Pawn) {
-            return 10;
+            return pieceEvaluator.evaluate(piece, row, column);
         } else if (piece instanceof Knight) {
             return 30;
         } else if (piece instanceof Bishop) {
@@ -125,4 +145,6 @@ public class AI {
         }
         return 0;
     }
+
+
 }
