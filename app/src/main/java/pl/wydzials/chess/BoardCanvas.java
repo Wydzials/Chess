@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.ChessEngine;
 import pl.wydzials.chess.engine.pieces.Piece;
 import pl.wydzials.chess.engine.pieces.Position;
@@ -84,6 +85,11 @@ public class BoardCanvas extends View {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             // wait for AI to finish
             if (engine.getGameType() == ChessEngine.GameType.PLAYER_VS_AI && engine.getState() == ChessEngine.MoveState.NEXT_BLACK) {
+                return true;
+            }
+
+            // end of the game
+            if(engine.getBoard().getGameState() != Board.GameState.PLAYING) {
                 return true;
             }
 

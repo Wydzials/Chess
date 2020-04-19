@@ -1,4 +1,13 @@
-package pl.wydzials.chess.engine.pieces;
+package pl.wydzials.chess.engine;
+
+import pl.wydzials.chess.engine.pieces.Bishop;
+import pl.wydzials.chess.engine.pieces.Color;
+import pl.wydzials.chess.engine.pieces.King;
+import pl.wydzials.chess.engine.pieces.Knight;
+import pl.wydzials.chess.engine.pieces.Pawn;
+import pl.wydzials.chess.engine.pieces.Piece;
+import pl.wydzials.chess.engine.pieces.Queen;
+import pl.wydzials.chess.engine.pieces.Rook;
 
 public class PieceEvaluator {
 

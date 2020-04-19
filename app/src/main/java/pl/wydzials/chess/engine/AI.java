@@ -1,5 +1,7 @@
 package pl.wydzials.chess.engine;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import pl.wydzials.chess.engine.pieces.Bishop;
@@ -8,19 +10,17 @@ import pl.wydzials.chess.engine.pieces.King;
 import pl.wydzials.chess.engine.pieces.Knight;
 import pl.wydzials.chess.engine.pieces.Pawn;
 import pl.wydzials.chess.engine.pieces.Piece;
-import pl.wydzials.chess.engine.pieces.PieceEvaluator;
 import pl.wydzials.chess.engine.pieces.Position;
 import pl.wydzials.chess.engine.pieces.Queen;
 import pl.wydzials.chess.engine.pieces.Rook;
 
 public class AI {
 
-    private final static int DEPTH = 3;
+    private final static int DEPTH = 4;
     private static Color maximizingColor;
     private static int minimaxCalls;
 
     private static PieceEvaluator pieceEvaluator = new PieceEvaluator();
-
 
     public static Position[] makeMove(Board board, Color color) {
         long start = System.nanoTime();
@@ -65,40 +65,55 @@ public class AI {
         if (color == maximizingColor) {
             double maxEvaluation = Integer.MIN_VALUE;
 
+
+            ArrayList<EvaluatedBoard> allPossibleMoves = new ArrayList<>();
             for (Position piece : myPieces) {
                 List<Position> moves = board.getPiece(piece).getPossibleMoves(board, piece);
                 for (Position move : moves) {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
-
-                    double evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
-                    maxEvaluation = Math.max(evaluation, maxEvaluation);
-
-                    alpha = Math.max(evaluation, alpha);
-                    if (beta <= alpha) {
-                        break;
-                    }
+                    int evaluation = -evaluateBoard(childBoard);
+                    allPossibleMoves.add(new EvaluatedBoard(evaluation, childBoard));
                 }
             }
+            Collections.sort(allPossibleMoves);
+
+            for (EvaluatedBoard evaluatedBoard : allPossibleMoves) {
+                double evaluation = minimax(evaluatedBoard.getBoard(), depth - 1, alpha, beta, color.other());
+                maxEvaluation = Math.max(evaluation, maxEvaluation);
+
+                alpha = Math.max(evaluation, alpha);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+
             return maxEvaluation;
         } else {
             double minEvaluation = Integer.MAX_VALUE;
 
+            ArrayList<EvaluatedBoard> allPossibleMoves = new ArrayList<>();
             for (Position piece : myPieces) {
                 List<Position> moves = board.getPiece(piece).getPossibleMoves(board, piece);
                 for (Position move : moves) {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
-
-                    double evaluation = minimax(childBoard, depth - 1, alpha, beta, color.other());
-                    minEvaluation = Math.min(evaluation, minEvaluation);
-
-                    beta = Math.min(evaluation, beta);
-                    if (beta <= alpha) {
-                        break;
-                    }
+                    int evaluation = evaluateBoard(childBoard);
+                    allPossibleMoves.add(new EvaluatedBoard(evaluation, childBoard));
                 }
             }
+            Collections.sort(allPossibleMoves);
+
+            for (EvaluatedBoard evaluatedBoard : allPossibleMoves) {
+                double evaluation = minimax(evaluatedBoard.getBoard(), depth - 1, alpha, beta, color.other());
+                minEvaluation = Math.min(evaluation, minEvaluation);
+
+                beta = Math.min(evaluation, beta);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+
             return minEvaluation;
         }
     }
@@ -118,14 +133,6 @@ public class AI {
                 }
             }
         }
-/*
-        for (Position position : board.getPiecesOfColor(maximizingColor)) {
-            value += evaluatePiece(board.getPiece(position));
-        }
-        for (Position position : board.getPiecesOfColor(maximizingColor.other())) {
-            value -= evaluatePiece(board.getPiece(position));
-        }
-*/
         return value;
     }
 
