@@ -14,7 +14,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.game_acivity);
+        setContentView(R.layout.game_activity);
 
         BoardCanvas canvas = findViewById(R.id.canvas);
         TextView textView = findViewById(R.id.textView);
