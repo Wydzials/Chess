@@ -82,7 +82,7 @@ public class Board implements Cloneable {
             set(posA.getRow(), posB.getColumn(), null);
 
         }
-        //clearEnPassantFlags(getPiece(posA).getColor());
+        clearEnPassantFlags(getPiece(posA).getColor());
 
         // castling
         if (getPiece(posA) instanceof King && Math.abs(posA.getColumn() - posB.getColumn()) > 1) {

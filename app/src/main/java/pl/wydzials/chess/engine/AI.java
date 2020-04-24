@@ -54,9 +54,6 @@ public class AI {
     private static double minimax(Board board, double depth, double alpha, double beta, Color color) {
         minimaxCalls++;
         if (depth <= 0 || board.getGameState() != Board.GameState.PLAYING) {
-            if (board.getGameState() == Board.GameState.BLACK_WON && color == Color.BLACK) {
-                return -evaluateBoard(board);
-            }
             return evaluateBoard(board);
         }
 
@@ -64,7 +61,6 @@ public class AI {
 
         if (color == maximizingColor) {
             double maxEvaluation = Integer.MIN_VALUE;
-
 
             ArrayList<EvaluatedBoard> allPossibleMoves = new ArrayList<>();
             for (Position piece : myPieces) {

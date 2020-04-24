@@ -53,7 +53,7 @@ public class ChessEngine {
                 state = state.next();
                 board.movePiece(previousPosition, position);
                 highlightedSquares.clear();
-                if (state == MoveState.NEXT_BLACK && gameType == GameType.PLAYER_VS_AI) {
+                if (state == MoveState.NEXT_BLACK && gameType == GameType.PLAYER_VS_AI && board.getGameState() == Board.GameState.PLAYING) {
                     Position[] move = AI.makeMove(board, Color.BLACK);
                     boardClicked(move[0].getRow(), move[0].getColumn());
                     boardClicked(move[1].getRow(), move[1].getColumn());

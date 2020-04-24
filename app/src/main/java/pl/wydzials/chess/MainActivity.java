@@ -1,8 +1,10 @@
 package pl.wydzials.chess;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,12 +16,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.menu_activity);
 
-        BoardCanvas canvas = findViewById(R.id.canvas);
-        canvas.setChessEngine(new ChessEngine(ChessEngine.GameType.PLAYER_VS_AI));
+        Button onePlayerButton = findViewById(R.id.one_player);
+        Button twoPlayersButton = findViewById(R.id.two_players);
 
-        TextView textView = findViewById(R.id.textView);
-        canvas.setTextView(textView);
+        onePlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("gameType", ChessEngine.GameType.PLAYER_VS_AI);
+                startActivity(intent);
+            }
+        });
+
+        twoPlayersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("gameType", ChessEngine.GameType.PLAYER_VS_PLAYER);
+                startActivity(intent);
+            }
+        });
     }
 }
