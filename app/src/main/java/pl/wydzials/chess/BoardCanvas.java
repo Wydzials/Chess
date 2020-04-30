@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import java.util.List;
-
 import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.ChessEngine;
 import pl.wydzials.chess.engine.pieces.Color;
@@ -62,8 +60,18 @@ public class BoardCanvas extends View {
         if (squares == null) {
             initializeSquares();
         }
-        canvas.drawBitmap(bitmaps.getBitmap("Board"), null, board, null);
 
+        canvas.drawBitmap(bitmaps.getBitmap("Board"), null, board, null);
+        drawSquaresAndPieces(canvas);
+
+        for (Position position : engine.getPossibleMoves()) {
+            canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
+        }
+
+        textView.setText(String.format("%s, %s", engine.getState(), engine.getBoard().getGameState()));
+    }
+
+    private void drawSquaresAndPieces(Canvas canvas) {
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
@@ -72,10 +80,9 @@ public class BoardCanvas extends View {
 
                 Piece piece = engine.getBoard().getPiece(row, column);
 
-
                 Bitmap pieceBitmap;
                 SharedPreferences preferences = MainActivity.getSharedPreferences();
-                if (engine.getGameType() == ChessEngine.GameType.PLAYER_VS_PLAYER && piece != null
+                if (engine.getGameMode() == ChessEngine.GameMode.PLAYER_VS_PLAYER && piece != null
                         && piece.getColor() == Color.BLACK && preferences.getBoolean("rotateBlackPieces", false)) {
                     pieceBitmap = bitmaps.getBitmap(piece, 180);
                 } else {
@@ -84,24 +91,12 @@ public class BoardCanvas extends View {
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
         }
-        textView.setText(engine.getState().toString() + ", " + engine.getBoard().getGameState().toString());
-
-        List<Position> highlightedSquares = engine.getHighlightedSquares();
-        for (Position position : highlightedSquares) {
-            canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
-        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            // wait for AI to finish
-            if (engine.getGameType() == ChessEngine.GameType.PLAYER_VS_AI && engine.getState() == ChessEngine.MoveState.NEXT_BLACK) {
-                return true;
-            }
-
-            // end of the game
-            if (engine.getBoard().getGameState() != Board.GameState.PLAYING) {
+            if (waitingForAI() || gameOver()) {
                 return true;
             }
 
@@ -119,5 +114,14 @@ public class BoardCanvas extends View {
             }
         }
         return true;
+    }
+
+    private boolean gameOver() {
+        return engine.getBoard().getGameState() != Board.GameState.PLAYING;
+    }
+
+    private boolean waitingForAI() {
+        return engine.getGameMode() == ChessEngine.GameMode.PLAYER_VS_AI
+                && engine.getState() == ChessEngine.MoveState.NEXT_BLACK;
     }
 }

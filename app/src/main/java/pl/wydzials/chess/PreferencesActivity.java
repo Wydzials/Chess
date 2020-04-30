@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class PreferencesActivity extends AppCompatActivity {
 
     boolean stateRotateBlackPieces;
-    Switch rotateBlackPieces;
+    Switch switchRotateBlackPieces;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +19,17 @@ public class PreferencesActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.preferences_activity);
 
-        rotateBlackPieces = findViewById(R.id.rotate_black_pieces);
+        switchRotateBlackPieces = findViewById(R.id.rotate_black_pieces);
 
         final SharedPreferences preferences = MainActivity.getSharedPreferences();
         stateRotateBlackPieces = preferences.getBoolean("rotateBlackPieces", false);
-        rotateBlackPieces.setChecked(stateRotateBlackPieces);
+        switchRotateBlackPieces.setChecked(stateRotateBlackPieces);
 
-        rotateBlackPieces.setOnClickListener(new View.OnClickListener() {
+        switchRotateBlackPieces.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stateRotateBlackPieces = !stateRotateBlackPieces;
-                rotateBlackPieces.setChecked(stateRotateBlackPieces);
+                switchRotateBlackPieces.setChecked(stateRotateBlackPieces);
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("rotateBlackPieces", stateRotateBlackPieces);

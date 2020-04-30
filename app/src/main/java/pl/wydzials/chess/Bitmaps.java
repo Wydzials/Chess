@@ -10,7 +10,7 @@ import java.util.HashMap;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
 
-public class Bitmaps {
+class Bitmaps {
 
     private HashMap<String, Bitmap> bitmaps;
     private Resources resources;

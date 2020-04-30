@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra("gameType", ChessEngine.GameType.PLAYER_VS_AI);
+                intent.putExtra("gameMode", ChessEngine.GameMode.PLAYER_VS_AI);
                 startActivity(intent);
             }
         });
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra("gameType", ChessEngine.GameType.PLAYER_VS_PLAYER);
+                intent.putExtra("gameMode", ChessEngine.GameMode.PLAYER_VS_PLAYER);
                 startActivity(intent);
             }
         });

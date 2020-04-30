@@ -10,29 +10,32 @@ import pl.wydzials.chess.engine.pieces.Position;
 public class ChessEngine {
 
     private MoveState state;
-    private Board board;
-    private Position previousPosition;
-    private List<Position> highlightedSquares;
-    private GameType gameType;
+    private GameMode gameMode;
 
-    public ChessEngine(GameType gameType) {
+    private Board board;
+    private Piece piece;
+
+    private List<Position> possibleMoves;
+    private Position previousPosition;
+
+    public ChessEngine(GameMode gameMode) {
         board = new Board();
         board.setOpeningPieces();
         state = MoveState.NEXT_WHITE;
-        highlightedSquares = new ArrayList<>();
-        this.gameType = gameType;
+        possibleMoves = new ArrayList<>();
+        this.gameMode = gameMode;
     }
 
-    public List<Position> getHighlightedSquares() {
-        return highlightedSquares;
+    public List<Position> getPossibleMoves() {
+        return possibleMoves;
     }
 
     public MoveState getState() {
         return state;
     }
 
-    public GameType getGameType() {
-        return gameType;
+    public GameMode getGameMode() {
+        return gameMode;
     }
 
     public Board getBoard() {
@@ -41,31 +44,45 @@ public class ChessEngine {
 
     public void boardClicked(int row, int column) {
         Position position = new Position(row, column);
-        Piece piece = board.getPiece(position);
+        piece = board.getPiece(position);
 
-        if (piece != null && ((state == MoveState.NEXT_WHITE && piece.getColor() == Color.WHITE)
-                || (state == MoveState.NEXT_BLACK && piece.getColor() == Color.BLACK))) {
+        if (startedMoving()) {
             state = state.next();
-            highlightedSquares = piece.getPossibleMoves(board, position);
-            previousPosition = new Position(row, column);
-        } else if ((state == MoveState.MOVING_WHITE || state == MoveState.MOVING_BLACK)) {
-            if (highlightedSquares.contains(position)) {
+            possibleMoves = piece.getPossibleMoves(board, position);
+            previousPosition = position;
+        } else if (state.isMoving()) {
+            if (possibleMoves.contains(position)) {
                 state = state.next();
                 board.movePiece(previousPosition, position);
-                highlightedSquares.clear();
-                if (state == MoveState.NEXT_BLACK && gameType == GameType.PLAYER_VS_AI && board.getGameState() == Board.GameState.PLAYING) {
+                possibleMoves.clear();
+
+                if (nextAIMove()) {
                     Position[] move = AI.makeMove(board, Color.BLACK);
                     boardClicked(move[0].getRow(), move[0].getColumn());
                     boardClicked(move[1].getRow(), move[1].getColumn());
                 }
-            } else if (piece != null && piece.getColor() == board.getPiece(previousPosition).getColor()) {
-                highlightedSquares = piece.getPossibleMoves(board, position);
-                previousPosition = new Position(row, column);
+
+            } else if (clickedOtherAllyPiece()) {
+                possibleMoves = piece.getPossibleMoves(board, position);
+                previousPosition = position;
             } else {
                 state = state.previous();
-                highlightedSquares.clear();
+                possibleMoves.clear();
             }
         }
+    }
+
+    private boolean startedMoving() {
+        return piece != null && ((state == MoveState.NEXT_WHITE && piece.getColor() == Color.WHITE)
+                || (state == MoveState.NEXT_BLACK && piece.getColor() == Color.BLACK));
+    }
+
+    private boolean nextAIMove() {
+        return (state == MoveState.NEXT_BLACK && gameMode == GameMode.PLAYER_VS_AI && board.getGameState() == Board.GameState.PLAYING);
+    }
+
+    private boolean clickedOtherAllyPiece() {
+        return (piece != null && piece.getColor() == board.getPiece(previousPosition).getColor());
     }
 
     public enum MoveState {
@@ -81,9 +98,13 @@ public class ChessEngine {
         public MoveState previous() {
             return values()[(ordinal() + values().length - 1) % values().length];
         }
+
+        public boolean isMoving() {
+            return (this == MoveState.MOVING_WHITE || this == MoveState.MOVING_BLACK);
+        }
     }
 
-    public enum GameType {
+    public enum GameMode {
         PLAYER_VS_PLAYER,
         PLAYER_VS_AI
     }

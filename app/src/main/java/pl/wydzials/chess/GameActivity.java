@@ -20,12 +20,12 @@ public class GameActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.textView);
         canvas.setTextView(textView);
 
-        ChessEngine.GameType gameType = (ChessEngine.GameType) getIntent().getSerializableExtra("gameType");
-        if (gameType != null) {
-            if (gameType == ChessEngine.GameType.PLAYER_VS_AI) {
-                canvas.setChessEngine(new ChessEngine(ChessEngine.GameType.PLAYER_VS_AI));
+        ChessEngine.GameMode gameMode = (ChessEngine.GameMode) getIntent().getSerializableExtra("gameMode");
+        if (gameMode != null) {
+            if (gameMode == ChessEngine.GameMode.PLAYER_VS_AI) {
+                canvas.setChessEngine(new ChessEngine(ChessEngine.GameMode.PLAYER_VS_AI));
             } else {
-                canvas.setChessEngine(new ChessEngine(ChessEngine.GameType.PLAYER_VS_PLAYER));
+                canvas.setChessEngine(new ChessEngine(ChessEngine.GameMode.PLAYER_VS_PLAYER));
             }
         }
     }
