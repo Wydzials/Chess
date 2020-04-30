@@ -1,5 +1,6 @@
-package pl.wydzials.chess.engine;
+package pl.wydzials.chess.engine.ai;
 
+import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.pieces.Bishop;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.King;
@@ -9,7 +10,7 @@ import pl.wydzials.chess.engine.pieces.Piece;
 import pl.wydzials.chess.engine.pieces.Queen;
 import pl.wydzials.chess.engine.pieces.Rook;
 
-public class PieceEvaluator {
+class Evaluator {
 
     private static double[][] pawnWhite;
     private static double[][] pawnBlack;
@@ -24,7 +25,7 @@ public class PieceEvaluator {
 
     private static double[][] queen;
 
-    public PieceEvaluator() {
+    Evaluator() {
         pawnWhite = new double[][]{
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
                 {5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0},
@@ -83,7 +84,24 @@ public class PieceEvaluator {
     }
 
 
-    public double evaluate(Piece piece, int row, int column) {
+    double evaluateBoard(Board board, Color maximizingColor) {
+        int value = 0;
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                Piece piece = board.getPiece(row, column);
+                if (piece != null) {
+                    if (piece.getColor() == maximizingColor) {
+                        value += evaluatePiece(piece, row, column);
+                    } else {
+                        value -= evaluatePiece(piece, row, column);
+                    }
+                }
+            }
+        }
+        return value;
+    }
+
+    private double evaluatePiece(Piece piece, int row, int column) {
         if (piece instanceof Pawn) {
             return 10 + (piece.getColor() == Color.WHITE ? pawnWhite[row][column] : pawnBlack[row][column]);
         } else if (piece instanceof Knight) {

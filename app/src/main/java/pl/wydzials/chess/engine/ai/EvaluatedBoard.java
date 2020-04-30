@@ -1,11 +1,13 @@
-package pl.wydzials.chess.engine;
+package pl.wydzials.chess.engine.ai;
+
+import pl.wydzials.chess.engine.Board;
 
 public class EvaluatedBoard implements Comparable<EvaluatedBoard> {
 
-    private int evaluation;
+    private double evaluation;
     private Board board;
 
-    EvaluatedBoard(int evaluation, Board board) {
+    EvaluatedBoard(double evaluation, Board board) {
         this.evaluation = evaluation;
         this.board = board;
     }
@@ -16,6 +18,6 @@ public class EvaluatedBoard implements Comparable<EvaluatedBoard> {
 
     @Override
     public int compareTo(EvaluatedBoard o) {
-        return evaluation - o.evaluation;
+        return Double.compare(evaluation, o.evaluation);
     }
 }

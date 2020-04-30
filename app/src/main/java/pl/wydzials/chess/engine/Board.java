@@ -76,11 +76,10 @@ public class Board implements Cloneable {
         return gameState;
     }
 
-    void movePiece(Position posA, Position posB) {
+    public void movePiece(Position posA, Position posB) {
         // en passant
         if (getPiece(posA) instanceof Pawn && (posA.getColumn() != posB.getColumn()) && getPiece(posB) == null) {
             set(posA.getRow(), posB.getColumn(), null);
-
         }
         clearEnPassantFlags(getPiece(posA).getColor());
 
@@ -121,7 +120,7 @@ public class Board implements Cloneable {
         }
     }
 
-    List<Position> getPiecesOfColor(Color color) {
+    public List<Position> getPiecesOfColor(Color color) {
         List<Position> pieces = new ArrayList<>();
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
@@ -136,7 +135,6 @@ public class Board implements Cloneable {
 
     public enum GameState {
         PLAYING,
-        DRAW,
         WHITE_WON,
         BLACK_WON
     }

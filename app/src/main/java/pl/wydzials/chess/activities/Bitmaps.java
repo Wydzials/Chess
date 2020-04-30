@@ -1,4 +1,4 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.activities;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 
 import java.util.HashMap;
 
+import pl.wydzials.chess.R;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
 

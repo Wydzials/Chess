@@ -3,6 +3,7 @@ package pl.wydzials.chess.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.wydzials.chess.engine.ai.AI;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
 import pl.wydzials.chess.engine.pieces.Position;

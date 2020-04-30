@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@drawable/wood"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <pl.wydzials.chess.BoardCanvas
+    <pl.wydzials.chess.activities.BoardCanvas
         android:id="@+id/canvas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

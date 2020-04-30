@@ -1,4 +1,4 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.activities;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pl.wydzials.chess.R;
 import pl.wydzials.chess.engine.ChessEngine;
 
 public class GameActivity extends AppCompatActivity {

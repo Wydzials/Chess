@@ -1,4 +1,4 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,11 +34,11 @@ public class BoardCanvas extends View {
         bitmaps = new Bitmaps(getResources());
     }
 
-    void setChessEngine(ChessEngine engine) {
+    public void setChessEngine(ChessEngine engine) {
         this.engine = engine;
     }
 
-    void setTextView(TextView textView) {
+    public void setTextView(TextView textView) {
         this.textView = textView;
     }
 

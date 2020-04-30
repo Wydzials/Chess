@@ -1,18 +1,12 @@
-package pl.wydzials.chess.engine;
+package pl.wydzials.chess.engine.ai;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pl.wydzials.chess.engine.pieces.Bishop;
+import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.pieces.Color;
-import pl.wydzials.chess.engine.pieces.King;
-import pl.wydzials.chess.engine.pieces.Knight;
-import pl.wydzials.chess.engine.pieces.Pawn;
-import pl.wydzials.chess.engine.pieces.Piece;
 import pl.wydzials.chess.engine.pieces.Position;
-import pl.wydzials.chess.engine.pieces.Queen;
-import pl.wydzials.chess.engine.pieces.Rook;
 
 public class AI {
 
@@ -20,10 +14,10 @@ public class AI {
     private static Color maximizingColor;
     private static int minimaxCalls;
 
-    private static PieceEvaluator pieceEvaluator = new PieceEvaluator();
+    private static Evaluator evaluator = new Evaluator();
 
     public static Position[] makeMove(Board board, Color color) {
-        long start = System.nanoTime();
+        long startTime = System.nanoTime();
         minimaxCalls = 0;
         maximizingColor = color;
         List<Position> myPieces = board.getPiecesOfColor(color);
@@ -46,15 +40,16 @@ public class AI {
                 }
             }
         }
+
         System.out.println("Minimax calls: " + minimaxCalls);
-        System.out.println("Time: " + (System.nanoTime() - start) / 1_000_000);
+        System.out.println("Time: " + (System.nanoTime() - startTime) / 1_000_000);
         return new Position[]{bestMoveA, bestMoveB};
     }
 
     private static double minimax(Board board, double depth, double alpha, double beta, Color color) {
         minimaxCalls++;
         if (depth <= 0 || board.getGameState() != Board.GameState.PLAYING) {
-            return evaluateBoard(board);
+            return evaluator.evaluateBoard(board, maximizingColor);
         }
 
         List<Position> myPieces = board.getPiecesOfColor(color);
@@ -68,7 +63,7 @@ public class AI {
                 for (Position move : moves) {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
-                    int evaluation = -evaluateBoard(childBoard);
+                    double evaluation = -evaluator.evaluateBoard(childBoard, maximizingColor);
                     allPossibleMoves.add(new EvaluatedBoard(evaluation, childBoard));
                 }
             }
@@ -94,7 +89,7 @@ public class AI {
                 for (Position move : moves) {
                     Board childBoard = board.clone();
                     childBoard.movePiece(piece, move);
-                    int evaluation = evaluateBoard(childBoard);
+                    double evaluation = evaluator.evaluateBoard(childBoard, maximizingColor);
                     allPossibleMoves.add(new EvaluatedBoard(evaluation, childBoard));
                 }
             }
@@ -113,41 +108,5 @@ public class AI {
             return minEvaluation;
         }
     }
-
-    private static int evaluateBoard(Board board) {
-        int value = 0;
-
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                Piece piece = board.getPiece(row, column);
-                if (piece != null) {
-                    if (piece.getColor() == maximizingColor) {
-                        value += evaluatePiece(piece, row, column);
-                    } else {
-                        value -= evaluatePiece(piece, row, column);
-                    }
-                }
-            }
-        }
-        return value;
-    }
-
-    private static double evaluatePiece(Piece piece, int row, int column) {
-        if (piece instanceof Pawn) {
-            return pieceEvaluator.evaluate(piece, row, column);
-        } else if (piece instanceof Knight) {
-            return 30;
-        } else if (piece instanceof Bishop) {
-            return 30;
-        } else if (piece instanceof Rook) {
-            return 50;
-        } else if (piece instanceof Queen) {
-            return 90;
-        } else if (piece instanceof King) {
-            return 900;
-        }
-        return 0;
-    }
-
 
 }

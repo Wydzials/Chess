@@ -1,4 +1,4 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pl.wydzials.chess.R;
 import pl.wydzials.chess.engine.ChessEngine;
 
 public class MainActivity extends AppCompatActivity {

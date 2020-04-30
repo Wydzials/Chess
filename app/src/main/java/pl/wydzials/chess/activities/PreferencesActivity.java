@@ -1,4 +1,4 @@
-package pl.wydzials.chess;
+package pl.wydzials.chess.activities;
 
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import pl.wydzials.chess.R;
 
 public class PreferencesActivity extends AppCompatActivity {
 
