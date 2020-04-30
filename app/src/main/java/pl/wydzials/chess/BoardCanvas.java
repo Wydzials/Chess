@@ -1,6 +1,7 @@
 package pl.wydzials.chess;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.ChessEngine;
+import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
 import pl.wydzials.chess.engine.pieces.Position;
 
@@ -65,10 +67,20 @@ public class BoardCanvas extends View {
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
+
                 canvas.drawBitmap(square, null, squares[row][column], null);
 
                 Piece piece = engine.getBoard().getPiece(row, column);
-                Bitmap pieceBitmap = bitmaps.getBitmap(piece);
+
+
+                Bitmap pieceBitmap;
+                SharedPreferences preferences = MainActivity.getSharedPreferences();
+                if (engine.getGameType() == ChessEngine.GameType.PLAYER_VS_PLAYER && piece != null
+                        && piece.getColor() == Color.BLACK && preferences.getBoolean("rotateBlackPieces", false)) {
+                    pieceBitmap = bitmaps.getBitmap(piece, 180);
+                } else {
+                    pieceBitmap = bitmaps.getBitmap(piece);
+                }
                 canvas.drawBitmap(pieceBitmap, null, squares[row][column], null);
             }
         }
@@ -89,7 +101,7 @@ public class BoardCanvas extends View {
             }
 
             // end of the game
-            if(engine.getBoard().getGameState() != Board.GameState.PLAYING) {
+            if (engine.getBoard().getGameState() != Board.GameState.PLAYING) {
                 return true;
             }
 
