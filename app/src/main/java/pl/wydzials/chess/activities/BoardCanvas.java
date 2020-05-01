@@ -68,7 +68,16 @@ public class BoardCanvas extends View {
             canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
         }
 
-        textView.setText(String.format("%s, %s", engine.getState(), engine.getBoard().getGameState()));
+
+        if (engine.getBoard().getGameState() == Board.GameState.WHITE_WON) {
+            textView.setText("White won!");
+        } else if (engine.getBoard().getGameState() == Board.GameState.BLACK_WON) {
+            textView.setText("Black won!");
+        } else if (engine.getState().toString().contains("WHITE")) {
+            textView.setText("White's turn");
+        } else if (engine.getState().toString().contains("BLACK")) {
+            textView.setText("Black's turn");
+        }
     }
 
     private void drawSquaresAndPieces(Canvas canvas) {
@@ -122,6 +131,6 @@ public class BoardCanvas extends View {
 
     private boolean waitingForAI() {
         return engine.getGameMode() == ChessEngine.GameMode.PLAYER_VS_AI
-                && engine.getState() == ChessEngine.MoveState.NEXT_BLACK;
+                && engine.getState() == ChessEngine.MoveState.BLACK_TURN;
     }
 }

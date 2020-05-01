@@ -40,11 +40,11 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void setSpinner() {
-        String[] s = new String[]{"1 - too easy", "2 - easy", "3 - medium", "4 - hard", "5 - long thinking"};
+        String[] s = new String[]{"1 - toddler", "2 - baby", "3 - child", "4 - adult", "5 - old man"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, s);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         aiSpinner.setAdapter(adapter);
-        aiSpinner.setSelection(preferences.getInt("aiDepth", 1) - 1);
+        aiSpinner.setSelection(preferences.getInt("aiDepth", 4) - 1);
     }
 
     private void setListeners() {
@@ -72,6 +72,6 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        // do nothing
     }
 }
