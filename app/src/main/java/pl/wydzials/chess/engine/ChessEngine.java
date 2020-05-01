@@ -3,6 +3,7 @@ package pl.wydzials.chess.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.wydzials.chess.activities.MainActivity;
 import pl.wydzials.chess.engine.ai.AI;
 import pl.wydzials.chess.engine.pieces.Color;
 import pl.wydzials.chess.engine.pieces.Piece;
@@ -58,7 +59,7 @@ public class ChessEngine {
                 possibleMoves.clear();
 
                 if (nextAIMove()) {
-                    Position[] move = AI.makeMove(board, Color.BLACK);
+                    Position[] move = AI.makeMove(board, Color.BLACK, MainActivity.getSharedPreferences().getInt("aiDepth", 4));
                     boardClicked(move[0].getRow(), move[0].getColumn());
                     boardClicked(move[1].getRow(), move[1].getColumn());
                 }

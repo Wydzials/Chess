@@ -16,22 +16,16 @@ import pl.wydzials.chess.engine.pieces.Queen;
 import pl.wydzials.chess.engine.pieces.Rook;
 
 public class Board implements Cloneable {
+
     private Piece[] squares;
-
-    //private ArrayList<Position> whitePieces;
-    //private ArrayList<Position> blackPieces;
-
     private GameState gameState;
 
     Board() {
         squares = new Piece[64];
-        //whitePieces = new ArrayList<>();
-        //blackPieces = new ArrayList<>();
-
         gameState = GameState.PLAYING;
     }
 
-    public void setOpeningPieces() {
+    void setOpeningPieces() {
         set(0, 0, new Rook(Color.BLACK));
         set(0, 1, new Knight(Color.BLACK));
         set(0, 2, new Bishop(Color.BLACK));
@@ -143,7 +137,6 @@ public class Board implements Cloneable {
         try {
             Board board = (Board) super.clone();
             board.squares = new Piece[64];
-
 
             for (int row = 0; row < 8; row++) {
                 for (int column = 0; column < 8; column++) {

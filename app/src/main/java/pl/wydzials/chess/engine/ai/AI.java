@@ -10,14 +10,16 @@ import pl.wydzials.chess.engine.pieces.Position;
 
 public class AI {
 
-    private final static int DEPTH = 4;
+    private static int depth = 4;
     private static Color maximizingColor;
     private static int minimaxCalls;
 
     private static Evaluator evaluator = new Evaluator();
 
-    public static Position[] makeMove(Board board, Color color) {
+    public static Position[] makeMove(Board board, Color color, int depth) {
         long startTime = System.nanoTime();
+
+        AI.depth = depth;
         minimaxCalls = 0;
         maximizingColor = color;
         List<Position> myPieces = board.getPiecesOfColor(color);
@@ -32,7 +34,7 @@ public class AI {
                 Board childBoard = board.clone();
                 childBoard.movePiece(piece, move);
 
-                double value = minimax(childBoard, DEPTH - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, color.other());
+                double value = minimax(childBoard, AI.depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, color.other());
                 if (value > bestMoveValue) {
                     bestMoveA = piece;
                     bestMoveB = move;
