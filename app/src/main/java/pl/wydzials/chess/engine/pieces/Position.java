@@ -41,4 +41,9 @@ public class Position {
     public boolean equals(Object o) {
         return (o instanceof Position && (row == ((Position) o).row && column == ((Position) o).column));
     }
+
+    @Override
+    public int hashCode() {
+        return 8 * row + column;
+    }
 }

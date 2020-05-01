@@ -4,8 +4,8 @@ import pl.wydzials.chess.engine.Board;
 
 public class EvaluatedBoard implements Comparable<EvaluatedBoard> {
 
-    private double evaluation;
-    private Board board;
+    private final double evaluation;
+    private final Board board;
 
     EvaluatedBoard(double evaluation, Board board) {
         this.evaluation = evaluation;

@@ -71,24 +71,9 @@ public class Board implements Cloneable {
     }
 
     public void movePiece(Position posA, Position posB) {
-        // en passant
-        if (getPiece(posA) instanceof Pawn && (posA.getColumn() != posB.getColumn()) && getPiece(posB) == null) {
-            set(posA.getRow(), posB.getColumn(), null);
-        }
-        clearEnPassantFlags(getPiece(posA).getColor());
+        checkEnPassant(posA, posB);
+        checkCastling(posA, posB);
 
-        // castling
-        if (getPiece(posA) instanceof King && Math.abs(posA.getColumn() - posB.getColumn()) > 1) {
-            if (posB.getColumn() == 6) {
-                set(posA.getRow(), 5, get(posA.getRow(), 7));
-                set(posA.getRow(), 7, null);
-            } else if (posB.getColumn() == 2) {
-                set(posA.getRow(), 3, get(posA.getRow(), 0));
-                set(posA.getRow(), 0, null);
-            }
-        }
-
-        // win check
         if (getPiece(posB) instanceof King) {
             gameState = getPiece(posB).getColor() == Color.WHITE ? GameState.BLACK_WON : GameState.WHITE_WON;
         }
@@ -100,6 +85,25 @@ public class Board implements Cloneable {
         // promotion
         if (getPiece(posB) instanceof Pawn && (posB.getRow() == 0 || posB.getRow() == 7)) {
             set(posB.getRow(), posB.getColumn(), new Queen(getPiece(posB).getColor()));
+        }
+    }
+
+    private void checkEnPassant(Position posA, Position posB) {
+        if (getPiece(posA) instanceof Pawn && (posA.getColumn() != posB.getColumn()) && getPiece(posB) == null) {
+            set(posA.getRow(), posB.getColumn(), null);
+        }
+        clearEnPassantFlags(getPiece(posA).getColor());
+    }
+
+    private void checkCastling(Position posA, Position posB) {
+        if (getPiece(posA) instanceof King && Math.abs(posA.getColumn() - posB.getColumn()) > 1) {
+            if (posB.getColumn() == 6) {
+                set(posA.getRow(), 5, get(posA.getRow(), 7));
+                set(posA.getRow(), 7, null);
+            } else if (posB.getColumn() == 2) {
+                set(posA.getRow(), 3, get(posA.getRow(), 0));
+                set(posA.getRow(), 0, null);
+            }
         }
     }
 

@@ -23,7 +23,7 @@ public class ChessEngine {
     public ChessEngine(GameMode gameMode) {
         board = new Board();
         board.setOpeningPieces();
-        state = MoveState.NEXT_WHITE;
+        state = MoveState.WHITE_TURN;
         possibleMoves = new ArrayList<>();
         this.gameMode = gameMode;
     }
@@ -75,12 +75,12 @@ public class ChessEngine {
     }
 
     private boolean startedMoving() {
-        return piece != null && ((state == MoveState.NEXT_WHITE && piece.getColor() == Color.WHITE)
-                || (state == MoveState.NEXT_BLACK && piece.getColor() == Color.BLACK));
+        return piece != null && ((state == MoveState.WHITE_TURN && piece.getColor() == Color.WHITE)
+                || (state == MoveState.BLACK_TURN && piece.getColor() == Color.BLACK));
     }
 
     private boolean nextAIMove() {
-        return (state == MoveState.NEXT_BLACK && gameMode == GameMode.PLAYER_VS_AI && board.getGameState() == Board.GameState.PLAYING);
+        return (state == MoveState.BLACK_TURN && gameMode == GameMode.PLAYER_VS_AI && board.getGameState() == Board.GameState.PLAYING);
     }
 
     private boolean clickedOtherAllyPiece() {
@@ -88,9 +88,9 @@ public class ChessEngine {
     }
 
     public enum MoveState {
-        NEXT_WHITE,
+        WHITE_TURN,
         MOVING_WHITE,
-        NEXT_BLACK,
+        BLACK_TURN,
         MOVING_BLACK;
 
         public MoveState next() {

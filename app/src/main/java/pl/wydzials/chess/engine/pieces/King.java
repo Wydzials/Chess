@@ -6,7 +6,7 @@ import java.util.List;
 import pl.wydzials.chess.engine.Board;
 
 public class King extends Piece {
-    public boolean castlingReady;
+    private boolean castlingReady;
 
     public King(Color color) {
         super(color);
@@ -33,7 +33,7 @@ public class King extends Piece {
                 Position testPosition = myPosition.add(0, 0);
                 while (testPosition.canAdd(0, direction)) {
                     testPosition = testPosition.add(0, direction);
-                    if (board.getPiece(testPosition) instanceof Rook && ((Rook) board.getPiece(testPosition)).castlingReady) {
+                    if (board.getPiece(testPosition) instanceof Rook && ((Rook) board.getPiece(testPosition)).isCastlingReady()) {
                         moves.add(myPosition.add(0, direction * 2));
                     } else if (board.getPiece(testPosition) != null) {
                         break;

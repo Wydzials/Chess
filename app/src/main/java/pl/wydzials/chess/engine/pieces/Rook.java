@@ -6,7 +6,7 @@ import pl.wydzials.chess.engine.Board;
 
 public class Rook extends Piece {
 
-    public boolean castlingReady;
+    private boolean castlingReady;
 
     public Rook(Color color) {
         super(color);
@@ -21,5 +21,9 @@ public class Rook extends Piece {
 
     public void madeMove(Board board, Position posA, Position posB) {
         castlingReady = false;
+    }
+
+    boolean isCastlingReady() {
+        return castlingReady;
     }
 }
