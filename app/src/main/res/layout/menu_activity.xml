@@ -19,21 +19,21 @@
             android:id="@+id/one_player"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Play vs AI" />
+            android:text="@string/play_vs_ai" />
 
         <Button
             android:id="@+id/two_players"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Play with a friend" />
+            android:text="@string/play_vs_friend" />
 
         <Button
             android:id="@+id/preferences"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Settings" />
+            android:text="@string/settings" />
     </LinearLayout>
 
 </LinearLayout>

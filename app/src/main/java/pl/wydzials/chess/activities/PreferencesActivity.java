@@ -18,6 +18,7 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
     boolean stateRotateBlackPieces;
     Switch switchRotateBlackPieces;
     Spinner aiSpinner;
+    Spinner languageSpinner;
 
     SharedPreferences preferences;
 
@@ -31,20 +32,35 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
 
         switchRotateBlackPieces = findViewById(R.id.rotate_black_pieces);
         aiSpinner = findViewById(R.id.ai_spinner);
+        languageSpinner = findViewById(R.id.language_spinner);
 
-        setSpinner();
+
+        setSpinners();
         setListeners();
 
         stateRotateBlackPieces = preferences.getBoolean("rotateBlackPieces", false);
         switchRotateBlackPieces.setChecked(stateRotateBlackPieces);
     }
 
-    private void setSpinner() {
-        String[] s = new String[]{"1 - toddler", "2 - baby", "3 - child", "4 - adult", "5 - old man"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, s);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        aiSpinner.setAdapter(adapter);
+    private void setSpinners() {
+        String[] depths = new String[]{getString(R.string.difficulty1), getString(R.string.difficulty2),
+                getString(R.string.difficulty3), getString(R.string.difficulty4), getString(R.string.difficulty5)};
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, depths);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        aiSpinner.setAdapter(adapter1);
         aiSpinner.setSelection(preferences.getInt("aiDepth", 4) - 1);
+
+
+        String[] languages = new String[]{"English", "Polski"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, languages);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(adapter2);
+        String language = preferences.getString("language", "en");
+        if (language.equals("pl")) {
+            languageSpinner.setSelection(1);
+        } else {
+            languageSpinner.setSelection(0);
+        }
     }
 
     private void setListeners() {
@@ -61,13 +77,25 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
         });
 
         aiSpinner.setOnItemSelectedListener(this);
+        languageSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("aiDepth", position + 1);
-        editor.apply();
+        if (parent.getId() == R.id.ai_spinner) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("aiDepth", position + 1);
+            editor.apply();
+        } else {
+            SharedPreferences.Editor editor = preferences.edit();
+            if (position == 1) {
+                editor.putString("language", "pl");
+            } else {
+                editor.putString("language", "en");
+            }
+            editor.apply();
+            MainActivity.restart();
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import pl.wydzials.chess.R;
 import pl.wydzials.chess.engine.Board;
 import pl.wydzials.chess.engine.ChessEngine;
 import pl.wydzials.chess.engine.pieces.Color;
@@ -70,13 +71,13 @@ public class BoardCanvas extends View {
 
 
         if (engine.getBoard().getGameState() == Board.GameState.WHITE_WON) {
-            textView.setText("White won!");
+            textView.setText(R.string.white_won);
         } else if (engine.getBoard().getGameState() == Board.GameState.BLACK_WON) {
-            textView.setText("Black won!");
+            textView.setText(R.string.black_won);
         } else if (engine.getState().toString().contains("WHITE")) {
-            textView.setText("White's turn");
+            textView.setText(R.string.white_turn);
         } else if (engine.getState().toString().contains("BLACK")) {
-            textView.setText("Black's turn");
+            textView.setText(R.string.black_turn);
         }
     }
 

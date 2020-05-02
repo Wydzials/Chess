@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Szachy</string>
+    <string name="play_vs_ai">Gra z komputerem</string>
+    <string name="play_vs_friend">Gra z przyjacielem</string>
+    <string name="settings">Ustawienia</string>
+    <string name="white_won">Białe wygrały!</string>
+    <string name="white_turn">Ruch białych</string>
+    <string name="black_won">Czarne wygrały!</string>
+    <string name="black_turn">Ruch czarnych</string>
+    <string name="rotate_black_pieces">Odwróć czarne bierki w grze z przyjacielem</string>
+    <string name="app_language">Język aplikacji</string>
+    <string name="ai_difficulty">Poziom komputera</string>
+    <string name="difficulty5">5 - trudny (powolny)</string>
+    <string name="difficulty4">4 - średni</string>
+    <string name="difficulty3">3 - łatwy</string>
+    <string name="difficulty1">1 - zbyt łatwy</string>
+    <string name="difficulty2">2 - bardzo łatwy</string>
+</resources>
