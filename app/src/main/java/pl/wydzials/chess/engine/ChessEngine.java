@@ -20,6 +20,8 @@ public class ChessEngine {
     private List<Position> possibleMoves;
     private Position previousPosition;
 
+    private Position[] lastMove;
+
     public ChessEngine(GameMode gameMode) {
         board = new Board();
         board.setOpeningPieces();
@@ -44,6 +46,10 @@ public class ChessEngine {
         return board;
     }
 
+    public Position[] getLastMove() {
+        return lastMove;
+    }
+
     public void boardClicked(int row, int column) {
         Position position = new Position(row, column);
         piece = board.getPiece(position);
@@ -58,10 +64,14 @@ public class ChessEngine {
                 board.movePiece(previousPosition, position);
                 possibleMoves.clear();
 
+                lastMove = new Position[]{previousPosition, position};
+
                 if (nextAIMove()) {
                     Position[] move = AI.makeMove(board, Color.BLACK, MainActivity.getSharedPreferences().getInt("aiDepth", 4));
                     boardClicked(move[0].getRow(), move[0].getColumn());
                     boardClicked(move[1].getRow(), move[1].getColumn());
+
+                    lastMove = move;
                 }
 
             } else if (clickedOtherAllyPiece()) {

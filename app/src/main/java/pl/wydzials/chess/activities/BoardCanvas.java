@@ -49,8 +49,11 @@ public class BoardCanvas extends View {
 
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
-                squares[row][column] = new Rect(PADDING + column * squareSize, PADDING + row * squareSize,
-                        PADDING + (column + 1) * squareSize, PADDING + (row + 1) * squareSize);
+                int left = PADDING + column * squareSize;
+                int top = PADDING + row * squareSize;
+                int right = left + squareSize;
+                int bottom = top + squareSize;
+                squares[row][column] = new Rect(left, top, right, bottom);
             }
         }
         board = new Rect(0, 0, getWidth(), getWidth());
@@ -66,9 +69,12 @@ public class BoardCanvas extends View {
         drawSquaresAndPieces(canvas);
 
         for (Position position : engine.getPossibleMoves()) {
-            canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
+            if(engine.getBoard().getPiece(position.getRow(), position.getColumn()) == null) {
+                canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
+            } else {
+                canvas.drawBitmap(bitmaps.getBitmap("SquareH2"), null, squares[position.getRow()][position.getColumn()], null);
+            }
         }
-
 
         if (engine.getBoard().getGameState() == Board.GameState.WHITE_WON) {
             textView.setText(R.string.white_won);
@@ -85,8 +91,16 @@ public class BoardCanvas extends View {
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 Bitmap square = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareW") : bitmaps.getBitmap("SquareB");
-
                 canvas.drawBitmap(square, null, squares[row][column], null);
+
+                Position[] lastMove = engine.getLastMove();
+                if (lastMove != null) {
+                    if (lastMove[0].getColumn() == column && lastMove[0].getRow() == row ||
+                            lastMove[1].getColumn() == column && lastMove[1].getRow() == row) {
+                        Bitmap squareH = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareHW") : bitmaps.getBitmap("SquareHB");
+                        canvas.drawBitmap(squareH, null, squares[row][column], null);
+                    }
+                }
 
                 Piece piece = engine.getBoard().getPiece(row, column);
 

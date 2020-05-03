@@ -42,6 +42,9 @@ class Bitmaps {
         bitmaps.put("SquareB", BitmapFactory.decodeResource(resources, R.drawable.square_b));
         bitmaps.put("SquareW", BitmapFactory.decodeResource(resources, R.drawable.square_w));
         bitmaps.put("SquareH", BitmapFactory.decodeResource(resources, R.drawable.square_h));
+        bitmaps.put("SquareH2", BitmapFactory.decodeResource(resources, R.drawable.square_h2));
+        bitmaps.put("SquareHB", BitmapFactory.decodeResource(resources, R.drawable.square_hb));
+        bitmaps.put("SquareHW", BitmapFactory.decodeResource(resources, R.drawable.square_hw));
     }
 
     Bitmap getBitmap(Piece piece) {
