@@ -30,6 +30,8 @@ public class BoardCanvas extends View {
     private Rect[][] squares;
     private Rect board;
 
+    private SharedPreferences preferences;
+
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         bitmaps = new Bitmaps(getResources());
@@ -61,6 +63,7 @@ public class BoardCanvas extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        preferences = MainActivity.getSharedPreferences();
         if (squares == null) {
             initializeSquares();
         }
@@ -68,11 +71,13 @@ public class BoardCanvas extends View {
         canvas.drawBitmap(bitmaps.getBitmap("Board"), null, board, null);
         drawSquaresAndPieces(canvas);
 
-        for (Position position : engine.getPossibleMoves()) {
-            if(engine.getBoard().getPiece(position.getRow(), position.getColumn()) == null) {
-                canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
-            } else {
-                canvas.drawBitmap(bitmaps.getBitmap("SquareH2"), null, squares[position.getRow()][position.getColumn()], null);
+        if (preferences.getBoolean("highlightLegalMoves", true)) {
+            for (Position position : engine.getPossibleMoves()) {
+                if (engine.getBoard().getPiece(position.getRow(), position.getColumn()) == null) {
+                    canvas.drawBitmap(bitmaps.getBitmap("SquareH"), null, squares[position.getRow()][position.getColumn()], null);
+                } else {
+                    canvas.drawBitmap(bitmaps.getBitmap("SquareH2"), null, squares[position.getRow()][position.getColumn()], null);
+                }
             }
         }
 
@@ -94,7 +99,7 @@ public class BoardCanvas extends View {
                 canvas.drawBitmap(square, null, squares[row][column], null);
 
                 Position[] lastMove = engine.getLastMove();
-                if (lastMove != null) {
+                if (lastMove != null && preferences.getBoolean("highlightLastMove", true)) {
                     if (lastMove[0].getColumn() == column && lastMove[0].getRow() == row ||
                             lastMove[1].getColumn() == column && lastMove[1].getRow() == row) {
                         Bitmap squareH = (row + column) % 2 == 0 ? bitmaps.getBitmap("SquareHW") : bitmaps.getBitmap("SquareHB");
@@ -103,9 +108,8 @@ public class BoardCanvas extends View {
                 }
 
                 Piece piece = engine.getBoard().getPiece(row, column);
-
                 Bitmap pieceBitmap;
-                SharedPreferences preferences = MainActivity.getSharedPreferences();
+
                 if (engine.getGameMode() == ChessEngine.GameMode.PLAYER_VS_PLAYER && piece != null
                         && piece.getColor() == Color.BLACK && preferences.getBoolean("rotateBlackPieces", false)) {
                     pieceBitmap = bitmaps.getBitmap(piece, 180);

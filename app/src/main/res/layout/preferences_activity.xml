@@ -22,6 +22,20 @@
         android:text="@string/rotate_black_pieces"
         android:textSize="18sp" />
 
+    <Switch
+        android:id="@+id/highlight_last_move"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/highlight_last_move"
+        android:textSize="18sp" />
+
+    <Switch
+        android:id="@+id/highlight_legal_moves"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/highlight_legal_moves"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

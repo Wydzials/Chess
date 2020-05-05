@@ -15,4 +15,6 @@
     <string name="difficulty3">3 - easy</string>
     <string name="difficulty4">4 - normal</string>
     <string name="difficulty5">5 - hard (slow)</string>
+    <string name="highlight_last_move">Highlight last move</string>
+    <string name="highlight_legal_moves">Highlight legal moves</string>
 </resources>

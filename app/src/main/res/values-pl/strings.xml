@@ -16,4 +16,6 @@
     <string name="difficulty3">3 - łatwy</string>
     <string name="difficulty1">1 - zbyt łatwy</string>
     <string name="difficulty2">2 - bardzo łatwy</string>
+    <string name="highlight_last_move">Pokazuj ostatni ruch</string>
+    <string name="highlight_legal_moves">Pokazuj dozwolone ruchy</string>
 </resources>

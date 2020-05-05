@@ -15,8 +15,9 @@ import pl.wydzials.chess.R;
 
 public class PreferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    boolean stateRotateBlackPieces;
-    Switch switchRotateBlackPieces;
+    Switch rotateSwitch;
+    Switch lastMoveSwitch;
+    Switch legalMovesSwitch;
     Spinner aiSpinner;
     Spinner languageSpinner;
 
@@ -30,16 +31,18 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
 
         preferences = MainActivity.getSharedPreferences();
 
-        switchRotateBlackPieces = findViewById(R.id.rotate_black_pieces);
+        rotateSwitch = findViewById(R.id.rotate_black_pieces);
+        lastMoveSwitch = findViewById(R.id.highlight_last_move);
+        legalMovesSwitch = findViewById(R.id.highlight_legal_moves);
         aiSpinner = findViewById(R.id.ai_spinner);
         languageSpinner = findViewById(R.id.language_spinner);
-
 
         setSpinners();
         setListeners();
 
-        stateRotateBlackPieces = preferences.getBoolean("rotateBlackPieces", false);
-        switchRotateBlackPieces.setChecked(stateRotateBlackPieces);
+        rotateSwitch.setChecked(preferences.getBoolean("rotateBlackPieces", false));
+        lastMoveSwitch.setChecked(preferences.getBoolean("highlightLastMove", true));
+        legalMovesSwitch.setChecked(preferences.getBoolean("highlightLegalMoves", true));
     }
 
     private void setSpinners() {
@@ -64,14 +67,29 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void setListeners() {
-        switchRotateBlackPieces.setOnClickListener(new View.OnClickListener() {
+        rotateSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stateRotateBlackPieces = !stateRotateBlackPieces;
-                switchRotateBlackPieces.setChecked(stateRotateBlackPieces);
-
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("rotateBlackPieces", stateRotateBlackPieces);
+                editor.putBoolean("rotateBlackPieces", rotateSwitch.isChecked());
+                editor.apply();
+            }
+        });
+
+        lastMoveSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("highlightLastMove", lastMoveSwitch.isChecked());
+                editor.apply();
+            }
+        });
+
+        legalMovesSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("highlightLegalMoves", legalMovesSwitch.isChecked());
                 editor.apply();
             }
         });
